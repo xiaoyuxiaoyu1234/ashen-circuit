@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#05070b" />
+<title>灰烬回廊 · Ashen Circuit</title>
+<meta name="description" content="一个跑在浏览器里的 3D 第三人称动作 roguelite：八层回廊，连击、翻滚、遗物。" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2305070b'/%3E%3Cpath d='M16 6l3 7 7 3-7 3-3 7-3-7-7-3 7-3z' fill='%234fe3d0'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="css/style.css" />
+<script type="importmap">
+{ "imports": { "three": "./libs/three.module.min.js" } }
+</script>
+</head>
+<body>
+<div id="app">
+  <canvas id="stage"></canvas>
+
+  <div id="vignette"></div>
+  <div id="flash"></div>
+  <div id="hurt"></div>
+  <div id="dmg-layer"></div>
+
+  <div id="hud">
+    <div class="hud-left">
+      <div class="bar-label"><span>生命</span><b id="hp-text">100 / 100</b></div>
+      <div class="bar hp"><i id="hp-fill"></i></div>
+      <div class="bar sp"><i id="sp-fill"></i></div>
+    </div>
+
+    <div class="hud-center">
+      <div class="stat"><span>层数</span><b id="room-text">1 / 8</b></div>
+      <div class="stat sub" id="wave-text"></div>
+      <div class="timer" id="time-text">0:00</div>
+    </div>
+
+    <div class="hud-right">
+      <div class="stat"><span>击杀</span><b id="kill-text">0</b></div>
+      <div id="relic-list"></div>
+    </div>
+
+    <div class="hint">WASD 移动 · 鼠标（或按住拖拽）转视角 · 左键 连击 · 右键 重击 · 空格 翻滚 · Esc 暂停</div>
+  </div>
+
+  <div id="bossbar">
+    <div class="boss-name" id="boss-name">灰烬之主</div>
+    <div class="boss-track"><i id="boss-fill"></i></div>
+  </div>
+
+  <div id="toast"></div>
+
+  <div id="panel-title" class="panel">
+    <div class="title-wrap">
+      <p class="kicker">ASHEN CIRCUIT</p>
+      <h1>灰烬回廊</h1>
+      <p class="tagline">八层回廊，每一次挥砍都要算数。</p>
+      <button id="btn-start" class="btn primary">开始下行</button>
+      <p class="best" id="best-line"></p>
+      <ul class="controls">
+        <li><span>WASD</span> 移动</li>
+        <li><span>鼠标 / 拖拽</span> 视角</li>
+        <li><span>左键</span> 三段连击</li>
+        <li><span>右键</span> 重击</li>
+        <li><span>空格</span> 翻滚（有无敌帧）</li>
+        <li><span>Esc</span> 暂停</li>
+      </ul>
+      <p class="note">建议使用桌面浏览器 · 支持手柄式 60fps</p>
+    </div>
+  </div>
+
+  <div id="panel-upgrade" class="panel">
+    <div class="up-wrap">
+      <p class="kicker">ROOM CLEARED</p>
+      <h2>选择一件遗物</h2>
+      <div id="cards" class="cards"></div>
+      <p class="tip">按 1 / 2 / 3 快速选择</p>
+    </div>
+  </div>
+
+  <div id="panel-death" class="panel">
+    <div class="death-wrap">
+      <p class="kicker">RUN ENDED</p>
+      <h2 id="death-title">你化为灰烬</h2>
+      <p id="death-sub" class="sub"></p>
+      <div id="death-stats" class="stats"></div>
+      <button id="btn-retry" class="btn primary">再来一次</button>
+      <p class="tip">空格 快速重开</p>
+    </div>
+  </div>
+
+  <div id="panel-pause" class="panel">
+    <div class="pause-wrap">
+      <h2>已暂停</h2>
+      <button id="btn-resume" class="btn primary">继续</button>
+      <p class="tip">Esc 继续 · M 静音</p>
+    </div>
+  </div>
+
+  <div id="touch">
+    <button id="btn-atk" class="tbtn">攻</button>
+    <button id="btn-heavy" class="tbtn">重</button>
+    <button id="btn-dodge" class="tbtn dodge">滚</button>
+  </div>
+
+  <div id="loading"><div class="spin"></div></div>
+</div>
+<script type="module" src="js/game.js"></script>
+</body>
+</html>
